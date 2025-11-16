@@ -1,0 +1,129 @@
+﻿@* /Views/Shared/_LayoutDashboard.cshtml *@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - School Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8f9fc;
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #fff;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+            .sidebar .top {
+                text-align: center;
+                padding: 20px 10px;
+            }
+
+                .sidebar .top img {
+                    width: 80px;
+                    height: 80px;
+                    object-fit: contain;
+                }
+
+            .sidebar .menu a {
+                display: block;
+                padding: 12px 20px;
+                color: #333;
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+                .sidebar .menu a.active,
+                .sidebar .menu a:hover {
+                    background: #6f42c1;
+                    color: white;
+                    border-radius: 8px;
+                    margin: 4px;
+                }
+
+            .sidebar .bottom {
+                padding: 15px 20px;
+                border-top: 1px solid #e0e0e0;
+            }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-content {
+            padding: 25px;
+        }
+
+        .logout {
+            color: red;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="top">
+            <img src="~/resources/images/schoollogo.png" alt="School Logo" />
+            <h5 class="mt-2">School Name</h5>
+        </div>
+        <div class="menu">
+            <a asp-controller="Users" asp-action="Index"
+               class="@(ViewBag.Active == null || ViewBag.Active == "Users" ? "active" : "")">
+                <i class="fa fa-chart-line me-2"></i> Users
+            </a>
+
+            <a asp-controller="Teachers" asp-action="Index"
+               class="@(ViewBag.Active == "Teachers" ? "active" : "")">
+                <i class="fa fa-user-tie me-2"></i> Teachers
+            </a>
+
+            <a asp-controller="Classes" asp-action="Index"
+               class="@(ViewBag.Active == "Classes" ? "active" : "")">
+                <i class="fa fa-school me-2"></i> Classes
+            </a>
+        </div>
+        <div class="bottom">
+            <span class="d-block fw-bold">Admin</span>
+            <a asp-controller="Accounts" asp-action="OnLogoutClicked" class="logout"><i class="fa fa-sign-out-alt me-2"></i> Logout</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="topbar">
+            <h4 class="m-0">@(ViewBag.PageTitle ?? "Dashboard")</h4>
+            <span class="text-muted">School Management</span>
+        </div>
+
+        <div class="main-content">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
