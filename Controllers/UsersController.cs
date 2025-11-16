@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SMS_MVC.Models;
 
 namespace SMS_MVC.Controllers
@@ -124,6 +125,7 @@ namespace SMS_MVC.Controllers
         [HttpPost]
         public IActionResult PageAddUser()
         {
+            ViewBag.Roles = new SelectList(_Context.Roles.ToList(), "id", "RoleType");
             return View("PageAddUser");
         }
 

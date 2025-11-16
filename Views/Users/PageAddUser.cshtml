@@ -109,7 +109,9 @@
             <!-- Role -->
             <div class="form-field">
                 <label>Role *</label>
-                @* <select asp-for="Role" asp-items="Model.RoleList"></select> *@
+                <select asp-for="RoleId" asp-items=ViewBag.Roles>
+                    <option value="">-- Select Role --</option>
+                </select>
             </div>
 
             <!-- Password -->
