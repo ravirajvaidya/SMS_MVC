@@ -90,8 +90,7 @@
     <h2>Add New User</h2>
     <p>Create a new user account for the school management system</p>
 
-    <form asp-action="AddUser" method="post">
-
+    <form method="post" asp-action="OnAddUserClicked">
         <div class="form-grid">
 
             <!-- User Name -->
@@ -119,13 +118,18 @@
                 <label>Password</label>
                 <input asp-for="Password" type="password" placeholder="e.g., ********" />
             </div>
-
         </div>
 
         <!-- Buttons -->
         <div class="form-buttons">
-            <button type="submit" asp-action="OnCancleClicked" class="btn-cancel">Cancel</button>
-            <button type="submit" asp-action="OnAddUserClicked" class="btn-add">Add User</button>
+            <button type="submit" class="btn-add">Add User</button>
+        </div>
+    </form>
+
+    <form method="get" asp-action="OnCancleClicked">
+        <div class="form-buttons">
+
+        <button type="submit" class="btn-cancel">Cancel</button>
         </div>
 
     </form>

@@ -60,6 +60,13 @@ namespace SMS_MVC.Controllers
                                                  where roles.RoleType == "Librarian"
                                                  select admins).ToList();
                     break;
+                case "Students":
+                    userDashboardModel._Users = (from admins in _Context.Users
+                                                 join roles in _Context.Roles
+                                                 on admins.RoleId equals roles.id
+                                                 where roles.RoleType == "Student"
+                                                 select admins).ToList();
+                    break;
                 case "Staffs":
                     userDashboardModel._Users = (from admins in _Context.Users
                                                  join roles in _Context.Roles
@@ -67,7 +74,6 @@ namespace SMS_MVC.Controllers
                                                  where roles.RoleType == "Staff"
                                                  select admins).ToList();
                     break;
-
                 case "All":
                 default:
                     userDashboardModel._Users = _Context.Users.ToList();
@@ -133,8 +139,11 @@ namespace SMS_MVC.Controllers
         {
             return RedirectToAction("Index");
         }
-        public IActionResult OnAddUserClicked()
+        public IActionResult OnAddUserClicked(Users aUser)
         {
+            _Context.Users.Add(aUser);
+            _Context.SaveChanges();
+
             return RedirectToAction("Index");
         }
 

@@ -73,6 +73,24 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-2">
+            <div class="card text-center shadow-sm border-0" style="background-color: #F5F5F5;">
+                <div class="card-body">
+                    <h4 class="fw-bold">@Model.Students</h4>
+                    <p class="mb-0 text-dark">Students</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="card text-center shadow-sm border-0" style="background-color: #F5F5F5;">
+                <div class="card-body">
+                    <h4 class="fw-bold">@Model.Staffs</h4>
+                    <p class="mb-0 text-dark">Staffs</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- System Users Section -->
@@ -123,8 +141,14 @@
                 </li>
                 <li class="nav-item">
                     <form method="get" asp-action="Index">
-                        <input type="hidden" name="tab" value="Staff" />
-                        <button class="nav-link @(Model.ActiveTab == "Staff" ? "active" : "")">Staff</button>
+                        <input type="hidden" name="tab" value="Students" />
+                        <button class="nav-link @(Model.ActiveTab == "Students" ? "active" : "")">Students</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <form method="get" asp-action="Index">
+                        <input type="hidden" name="tab" value="Staffs" />
+                        <button class="nav-link @(Model.ActiveTab == "Staffs" ? "active" : "")">Staffs</button>
                     </form>
                 </li>
             </ul>
