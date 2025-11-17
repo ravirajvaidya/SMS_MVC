@@ -14,31 +14,43 @@ namespace SMS_MVC.Controllers
             _Context = context;
         }
 
-        public IActionResult Index(string filterSubject = "All")
+        public IActionResult Index(string search = "", string subjectFilter = "All")
         {
             ViewBag.Active = "Teachers";
             ViewBag.PageTitle = "Teachers Dashboard";
-            ViewBag.SelectedSubject = filterSubject;
-
-            List<string> lstOfSubs = new List<string>();
-            lstOfSubs = _Context.Subjects.Select(s => s.SubjectName).Distinct().ToList();
-
-            ViewBag.SubjectList = lstOfSubs;
+            ViewBag.SelectedSubject = subjectFilter;
+            ViewBag.Search = search;
+            ViewBag.SubjectList = _Context.Subjects.Select(s => s.SubjectName).Distinct().ToList();
             ViewBag.TotalTeachers = _Context.Teachers.Count();
-            ViewBag.TeacherList = (from t in _Context.Teachers
-                                   join u in _Context.Users on t.UserId equals u.id
-                                   join s in _Context.Subjects on t.SubjectId equals s.id
-                                   select new
-                                   {
-                                       t.id,
-                                       t.Name,
-                                       t.Email,
-                                       UserName = u.UserName,
-                                       SubjectName = s.SubjectName,
-                                       t.Qualification,
-                                       t.Experience,
-                                       JoiningDate = t.JoiningDate.ToShortDateString()
-                                   }).ToList();
+
+            var lstTeachers = from t in _Context.Teachers
+                        join u in _Context.Users on t.UserId equals u.id
+                        join s in _Context.Subjects on t.SubjectId equals s.id
+                        select new
+                        {
+                            t.id,
+                            t.Name,
+                            t.Email,
+                            UserName = u.UserName,
+                            SubjectName = s.SubjectName,
+                            t.Qualification,
+                            t.Experience,
+                            JoiningDate = t.JoiningDate.ToShortDateString()
+                        };
+
+            // Apply search filter
+            if (!string.IsNullOrEmpty(search))
+            {
+                lstTeachers = lstTeachers.Where(x => x.Name.Contains(search));
+            }
+
+            // Apply subject filter ONLY if not "All"
+            if (!string.IsNullOrEmpty(subjectFilter) && subjectFilter != "All")
+            {
+                lstTeachers = lstTeachers.Where(x => x.SubjectName == subjectFilter);
+            }
+
+            ViewBag.TeacherList = lstTeachers.ToList();
 
             return View();
         }
