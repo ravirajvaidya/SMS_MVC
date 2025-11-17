@@ -1,4 +1,6 @@
-﻿namespace SMS_MVC.Models
+﻿using SMS_MVC.Models.Model_Tables;
+
+namespace SMS_MVC.Models
 {
     public class UserDashboardModel
     {

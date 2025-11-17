@@ -88,10 +88,12 @@
 
 <div class="add-user-container">
 
-    <h2>Add New User</h2>
-    <p>Create a new user account for the school management system</p>
+    <h2>Edit User</h2>
+    <p>Update the user information</p>
 
-    <form method="post" asp-action="OnAddUserClicked">
+    <form method="post" asp-action="OnUpdateUserClicked">
+        <input type="hidden" asp-for="id" />
+
         <div class="form-grid">
 
             <!-- User Name -->
@@ -109,7 +111,7 @@
             <!-- Role -->
             <div class="form-field">
                 <label>Role *</label>
-                <select asp-for="RoleId" asp-items=ViewBag.Roles>
+                <select asp-for="RoleId" asp-items="ViewBag.Roles">
                     <option value="">-- Select Role --</option>
                 </select>
             </div>
@@ -117,17 +119,17 @@
             <!-- Password -->
             <div class="form-field">
                 <label>Password</label>
-                <input asp-for="Password" type="password" placeholder="e.g., ********" />
+                <input asp-for="Password" type="password" value="@Model.Password" placeholder="********" />
             </div>
         </div>
 
         <!-- Buttons -->
         <div class="form-buttons">
-            <button type="submit" class="btn-add">Add User</button>
+            <button type="submit" class="btn-add">Update User</button>
         </div>
     </form>
 
-    <form method="get" asp-action="Index">
+    <form method="get" asp-action="OnCancelClicked">
         <div class="form-buttons">
             <button type="submit" class="btn-cancel">Cancel</button>
         </div>

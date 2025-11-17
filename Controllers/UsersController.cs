@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SMS_MVC.Models;
+using SMS_MVC.Models.Model_Tables;
 
 namespace SMS_MVC.Controllers
 {
@@ -83,50 +84,30 @@ namespace SMS_MVC.Controllers
 
             userDashboardModel.TotalUsers = _Context.Users.ToList().Count();
 
-            userDashboardModel.Admins = (from admins in _Context.Users
-                                         join roles in _Context.Roles
-                                         on admins.RoleId equals roles.id
-                                         where roles.RoleType == "Admin"
-                                         select admins).ToList().Count;
+            var roleCounts = _Context.Users
+                .Join(_Context.Roles,
+                      u => u.RoleId,
+                      r => r.id,
+                      (u, r) => new { r.RoleType })
+                .GroupBy(x => x.RoleType)
+                .Select(g => new { RoleType = g.Key, Count = g.Count() })
+                .ToDictionary(x => x.RoleType, x => x.Count);
 
-            userDashboardModel.Teachers = (from teachers in _Context.Users
-                                           join roles in _Context.Roles
-                                           on teachers.RoleId equals roles.id
-                                           where roles.RoleType == "Teacher"
-                                           select teachers).ToList().Count;
+            userDashboardModel.Admins = roleCounts.GetValueOrDefault("Admin", 0);
+            userDashboardModel.Teachers = roleCounts.GetValueOrDefault("Teacher", 0);
+            userDashboardModel.Parents = roleCounts.GetValueOrDefault("Parent", 0);
+            userDashboardModel.Accountants = roleCounts.GetValueOrDefault("Accountant", 0);
+            userDashboardModel.Librarians = roleCounts.GetValueOrDefault("Librarian", 0);
+            userDashboardModel.Students = roleCounts.GetValueOrDefault("Student", 0);
+            userDashboardModel.Staffs = roleCounts.GetValueOrDefault("Staff", 0);
 
-            userDashboardModel.Parents = (from parents in _Context.Users
-                                          join roles in _Context.Roles
-                                          on parents.RoleId equals roles.id
-                                          where roles.RoleType == "Parent"
-                                          select parents).ToList().Count;
-
-            userDashboardModel.Accountants = (from accountants in _Context.Users
-                                              join roles in _Context.Roles
-                                              on accountants.RoleId equals roles.id
-                                              where roles.RoleType == "Accountant"
-                                              select accountants).ToList().Count;
-
-            userDashboardModel.Librarians = (from accountants in _Context.Users
-                                             join roles in _Context.Roles
-                                             on accountants.RoleId equals roles.id
-                                             where roles.RoleType == "Librarian"
-                                             select accountants).ToList().Count;
-
-            userDashboardModel.Students = (from students in _Context.Users
-                                            join roles in _Context.Roles
-                                            on students.RoleId equals roles.id
-                                            where roles.RoleType == "Student"
-                                            select students).ToList().Count;
-
-            userDashboardModel.Staffs = (from students in _Context.Users
-                                           join roles in _Context.Roles
-                                           on students.RoleId equals roles.id
-                                           where roles.RoleType == "Staff"
-                                           select students).ToList().Count;
-            
             return View(userDashboardModel);
         }
+
+        /// <summary>
+        /// This is the Add User Part
+        /// </summary>
+        /// <returns></returns>
 
         [HttpPost]
         public IActionResult PageAddUser()
@@ -135,10 +116,6 @@ namespace SMS_MVC.Controllers
             return View("PageAddUser");
         }
 
-        public IActionResult OnCancleClicked()
-        {
-            return RedirectToAction("Index");
-        }
         public IActionResult OnAddUserClicked(Users aUser)
         {
             _Context.Users.Add(aUser);
@@ -147,5 +124,31 @@ namespace SMS_MVC.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// This is the Edit User Part
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+
+        [HttpPost]
+        public IActionResult PageEditUser(int userid)
+        {
+            Users aUser = _Context.Users.Where(u => u.id == userid).FirstOrDefault();
+            ViewBag.Roles = new SelectList(_Context.Roles.ToList(), "id", "RoleType", aUser.RoleId);
+
+            if (aUser != null)
+            { 
+                return View ("PageEditUser",aUser);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult OnUpdateUserClicked(Users aUser)
+        {
+            _Context.Users.Update(aUser);
+            _Context.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -1,0 +1,201 @@
+﻿@{
+    Layout = "_LayoutDashboard";
+}
+
+<style>
+    .teacher-dashboard {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 30px;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-section h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .header-section p {
+        color: gray;
+        margin-top: 5px;
+    }
+
+    .add-teacher-btn {
+        background-color: #6A5AE0;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .summary-container {
+        display: flex;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .summary-card {
+        flex: 1;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+    }
+
+    .summary-card .icon {
+        font-size: 26px;
+    }
+
+    .summary-card .count {
+        font-size: 28px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .summary-card .label {
+        color: gray;
+        margin-top: 5px;
+    }
+
+    .filter-bar {
+        display: flex;
+        gap: 15px;
+        margin: 30px 0;
+    }
+
+    .search-box {
+        flex: 1;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .filter-dropdown {
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .teacher-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .teacher-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: calc(33% - 20px);
+    }
+
+    .teacher-card h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .teacher-card p {
+        margin: 4px 0;
+        color: gray;
+        font-size: 14px;
+    }
+
+    .badge {
+        display: inline-block;
+        background-color: #EAEAEA;
+        border-radius: 5px;
+        padding: 4px 8px;
+        margin-right: 5px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="teacher-dashboard">
+
+    <!-- Header Section -->
+    <div class="header-section">
+        <div>
+            <h1>Teachers</h1>
+            <p>Manage teaching staff and their assignments</p>
+        </div>
+
+        <form method="get" asp-action="PageAddTeacher">
+            <button type="submit" class="add-teacher-btn">+ Add Teacher</button>
+        </form>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-container">
+        <div class="summary-card">
+            <div class="icon">📚</div>
+            <div class="count">@ViewBag.TotalTeachers</div>
+            <div class="label">Total Teachers</div>
+        </div>
+
+        @* <div class="summary-card">
+            <div class="icon">📆</div>
+            <div class="count">@ViewBag.ActiveTeachers</div>
+            <div class="label">Active</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="icon">⏰</div>
+            <div class="count">@ViewBag.OnLeave</div>
+            <div class="label">On Leave</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="icon">📖</div>
+            <div class="count">@ViewBag.Subjects</div>
+            <div class="label">Subjects</div>
+        </div> *@
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="filter-bar">
+        <form method="get" asp-action="TeachersDashboard" style="display:flex; gap:15px; width:100%;">
+            <input type="text"
+                   name="search"
+                   value="@ViewBag.Search"
+                   class="search-box"
+                   placeholder="Search teachers by Name..." />
+
+            <select name="subjectFilter" class="filter-dropdown" onchange="this.form.submit()">
+                <option value="All">All Subjects</option>
+                @foreach (var subject in ViewBag.SubjectList)
+                {
+                    <option value="@subject"
+                            selected="@(ViewBag.SelectedSubject == @subject)">
+                        @subject
+                    </option>
+                }
+            </select>
+        </form>
+    </div>
+
+    <!-- Teacher Cards -->
+    <div class="teacher-cards">
+        @foreach (var t in ViewBag.TeacherList)
+        {
+            <div class="teacher-card">
+                <h3>@t.Name</h3>
+                <p>UserName: @t.UserName</p>
+                <p>Email: @t.Email</p>
+                <p>Subject: @t.SubjectName</p>
+                <p>Qualification: @t.Qualification</p>
+                <p>Experience: @t.Experience yrs</p>
+                <p>JoiningDate: @t.JoiningDate</p>
+            </div>
+        }
+    </div>
+
+</div>

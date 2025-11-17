@@ -1,5 +1,4 @@
-﻿@using SMS_MVC.Models.Model_Tables
-@model Users
+﻿@model SMS_MVC.Models.Model_Tables.Teachers
 @{
     Layout = null;
 }
@@ -20,6 +19,7 @@
             font-size: 22px;
             font-weight: 600;
             color: #1a1a1a;
+            text-align: left;
         }
 
         .add-user-container p {
@@ -42,7 +42,8 @@
         margin-bottom: 6px;
     }
 
-    .form-field input, .form-field select {
+    .form-field input,
+    .form-field select {
         width: 100%;
         padding: 10px 12px;
         border: 1px solid #ccc;
@@ -84,49 +85,83 @@
     .btn-add:hover {
         background-color: #553c9a;
     }
+
+    /* Full row for dropdowns */
+    .col-span-2 {
+        grid-column: span 2;
+    }
 </style>
 
 <div class="add-user-container">
 
-    <h2>Add New User</h2>
-    <p>Create a new user account for the school management system</p>
+    <h2>Add New Teacher</h2>
+    <p>Fill in the teacher's information below</p>
 
-    <form method="post" asp-action="OnAddUserClicked">
+    <form method="post" asp-action="OnAddTeacherClicked">
+
         <div class="form-grid">
 
-            <!-- User Name -->
+            <!-- Select User -->
+            <div class="form-field col-span-2">
+                <label>Select User *</label>
+                <select asp-for="UserId" asp-items="ViewBag.UserList">
+                    <option value="">-- Select User --</option>
+                </select>
+            </div>
+
+            <!-- Full Name -->
             <div class="form-field">
-                <label>User Name *</label>
-                <input asp-for="UserName" placeholder="e.g., John Doe" />
+                <label>Full Name *</label>
+                <input asp-for="Name" placeholder="e.g., Dr. Sarah Johnson" />
             </div>
 
             <!-- Email -->
             <div class="form-field">
                 <label>Email *</label>
-                <input asp-for="Email" placeholder="e.g., john.doe@school.com" />
+                <input asp-for="Email" placeholder="e.g., teacher@demoschool.edu" />
             </div>
 
-            <!-- Role -->
+            <!-- Phone -->
             <div class="form-field">
-                <label>Role *</label>
-                <select asp-for="RoleId" asp-items=ViewBag.Roles>
-                    <option value="">-- Select Role --</option>
+                <label>Phone *</label>
+                <input asp-for="PhoneNumber" placeholder="e.g., +1 (555) 123-4567" />
+            </div>
+
+            <!-- Subject -->
+            <div class="form-field">
+                <label>Subject *</label>
+                <select asp-for="SubjectId" asp-items="ViewBag.SubjectList">
+                    <option value="">-- Select Subject --</option>
                 </select>
             </div>
 
-            <!-- Password -->
+            <!-- Qualification -->
             <div class="form-field">
-                <label>Password</label>
-                <input asp-for="Password" type="password" placeholder="e.g., ********" />
+                <label>Qualification *</label>
+                <input asp-for="Qualification" placeholder="e.g., M.Sc Mathematics, B.Ed" />
             </div>
+
+            <!-- Experience -->
+            <div class="form-field">
+                <label>Experience *</label>
+                <input asp-for="Experience" placeholder="e.g., 8 years" />
+            </div>
+
+            <!-- Joining Date -->
+            <div class="form-field">
+                <label>Joining Date *</label>
+                <input asp-for="JoiningDate" type="date" />
+            </div>
+
         </div>
 
         <!-- Buttons -->
         <div class="form-buttons">
-            <button type="submit" class="btn-add">Add User</button>
+            <button type="submit" class="btn-add">Add Teacher</button>
         </div>
     </form>
 
+    <!-- Cancel Button (Separate Form) -->
     <form method="get" asp-action="Index">
         <div class="form-buttons">
             <button type="submit" class="btn-cancel">Cancel</button>
