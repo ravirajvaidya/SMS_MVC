@@ -11,7 +11,7 @@ namespace SMS_MVC.Models
         
         public DbSet<Roles> Roles { get; set; }
         public DbSet<Grades> Grades { get; set; }
-        public DbSet<Section> Sections { get; set; }
+        public DbSet<Section> Section { get; set; }
         public DbSet<Subjects> Subjects { get; set; }
 
         public DbSet<Users> Users { get; set; }

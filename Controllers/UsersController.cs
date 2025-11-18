@@ -19,68 +19,20 @@ namespace SMS_MVC.Controllers
             ViewBag.PageTitle = "Users Dashboard";
             UserDashboardModel userDashboardModel = new UserDashboardModel();
             userDashboardModel.ActiveTab = tab;
-            // Filter based on tab
-            switch (tab)
+
+            if (tab == "All")
             {
-                case "Admins":
-                    userDashboardModel._Users = (from admins in _Context.Users
-                                                 join roles in _Context.Roles
-                                                 on admins.RoleId equals roles.id
-                                                 where roles.RoleType == "Admin"
-                                                 select admins).ToList();
-                    break;
-
-                case "Teachers":
-                    userDashboardModel._Users = (from admins in _Context.Users
-                                                 join roles in _Context.Roles
-                                                 on admins.RoleId equals roles.id
-                                                 where roles.RoleType == "Teacher"
-                                                 select admins).ToList();
-                    break;
-
-                case "Parents":
-                    userDashboardModel._Users = (from admins in _Context.Users
-                                                 join roles in _Context.Roles
-                                                 on admins.RoleId equals roles.id
-                                                 where roles.RoleType == "Parent"
-                                                 select admins).ToList();
-                    break;
-
-                case "Accountants":
-                    userDashboardModel._Users = (from admins in _Context.Users
-                                                 join roles in _Context.Roles
-                                                 on admins.RoleId equals roles.id
-                                                 where roles.RoleType == "Accountant"
-                                                 select admins).ToList();
-                    break;
-
-                case "Librarians":
-                    userDashboardModel._Users = (from admins in _Context.Users
-                                                 join roles in _Context.Roles
-                                                 on admins.RoleId equals roles.id
-                                                 where roles.RoleType == "Librarian"
-                                                 select admins).ToList();
-                    break;
-                case "Students":
-                    userDashboardModel._Users = (from admins in _Context.Users
-                                                 join roles in _Context.Roles
-                                                 on admins.RoleId equals roles.id
-                                                 where roles.RoleType == "Student"
-                                                 select admins).ToList();
-                    break;
-                case "Staffs":
-                    userDashboardModel._Users = (from admins in _Context.Users
-                                                 join roles in _Context.Roles
-                                                 on admins.RoleId equals roles.id
-                                                 where roles.RoleType == "Staff"
-                                                 select admins).ToList();
-                    break;
-                case "All":
-                default:
-                    userDashboardModel._Users = _Context.Users.ToList();
-                    break;
+                userDashboardModel._Users = _Context.Users.ToList();
             }
+            else
+            {
+                userDashboardModel._Users = (from admins in _Context.Users
+                                             join roles in _Context.Roles
+                                             on admins.RoleId equals roles.id
+                                             where roles.RoleType == tab.Remove(tab.Length - 1)
+                                             select admins).ToList();
 
+            }
 
             userDashboardModel.TotalUsers = _Context.Users.ToList().Count();
 
@@ -137,8 +89,8 @@ namespace SMS_MVC.Controllers
             ViewBag.Roles = new SelectList(_Context.Roles.ToList(), "id", "RoleType", aUser.RoleId);
 
             if (aUser != null)
-            { 
-                return View ("PageEditUser",aUser);
+            {
+                return View("PageEditUser", aUser);
             }
             return RedirectToAction("Index");
         }

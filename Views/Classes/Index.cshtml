@@ -3,7 +3,7 @@
 }
 
 <style>
-    .teacher-dashboard {
+    .classes-dashboard {
         font-family: 'Segoe UI', sans-serif;
         padding: 30px;
     }
@@ -25,7 +25,7 @@
             margin-top: 5px;
         }
 
-    .add-teacher-btn {
+    .add-class-btn {
         background-color: #6A5AE0;
         color: white;
         border: none;
@@ -84,13 +84,13 @@
         border: 1px solid #ccc;
     }
 
-    .teacher-cards {
+    .classes-cards {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
     }
 
-    .teacher-card {
+    .classes-card {
         background: white;
         border-radius: 12px;
         box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
@@ -98,12 +98,12 @@
         width: calc(33% - 20px);
     }
 
-        .teacher-card h3 {
+        .classes-card h3 {
             margin: 0;
             font-size: 18px;
         }
 
-        .teacher-card p {
+        .classes-card p {
             margin: 4px 0;
             color: gray;
             font-size: 14px;
@@ -119,17 +119,17 @@
     }
 </style>
 
-<div class="teacher-dashboard">
+<div class="classes-dashboard">
 
     <!-- Header Section -->
     <div class="header-section">
         <div>
-            <h1>Teachers</h1>
-            <p>Manage teaching staff and their assignments</p>
+            <h1>Classes</h1>
+            <p>Manage all classes and assigned teachers</p>
         </div>
 
-        <form method="get" asp-action="PageAddTeacher">
-            <button type="submit" class="add-teacher-btn">+ Add Teacher</button>
+        <form method="get" asp-action="PageAddClass">
+            <button type="submit" class="add-class-btn">+ Add Class</button>
         </form>
     </div>
 
@@ -137,27 +137,9 @@
     <div class="summary-container">
         <div class="summary-card">
             <div class="icon">📚</div>
-            <div class="count">@ViewBag.TotalTeachers</div>
-            <div class="label">Total Teachers</div>
+            <div class="count">@ViewBag.TotalClasses</div>
+            <div class="label">Total Classes</div>
         </div>
-
-        @* <div class="summary-card">
-            <div class="icon">📆</div>
-            <div class="count">@ViewBag.ActiveTeachers</div>
-            <div class="label">Active</div>
-        </div>
-
-        <div class="summary-card">
-            <div class="icon">⏰</div>
-            <div class="count">@ViewBag.OnLeave</div>
-            <div class="label">On Leave</div>
-        </div>
-
-        <div class="summary-card">
-            <div class="icon">📖</div>
-            <div class="count">@ViewBag.Subjects</div>
-            <div class="label">Subjects</div>
-        </div> *@
     </div>
 
     <!-- Search & Filters -->
@@ -167,36 +149,54 @@
                    name="search"
                    value="@ViewBag.Search"
                    class="search-box"
-                   placeholder="Search teachers by Name..." />
+                   placeholder="Search classes by Name..." />
 
-            <select name="subjectFilter" class="filter-dropdown" onchange="this.form.submit()">
-                <option value="All">All Subjects</option>
-                @foreach (var subject in ViewBag.SubjectList)
+            <select name="GradeFilter" class="filter-dropdown" onchange="this.form.submit()">
+                <option value="All">All Grades</option>
+                @foreach (var grade in ViewBag.GradesList)
                 {
-                    <option value="@subject"
-                            selected="@(ViewBag.SelectedSubject == @subject)">
-                        @subject
+                    <option value="@grade"
+                            selected="@(ViewBag.SelectedGrade == grade)">
+                        @grade
+                    </option>
+                }
+
+                @* @foreach (var grade in ViewBag.SelectedGrade as SelectList)
+                {
+                    <option value="@grade.Value"
+                            selected="@(ViewBag.SelectedGrade == grade.Value)">
+                        @grade.Text
+                    </option>
+                } *@
+            </select>
+
+            <select name="SectionFilter" class="filter-dropdown" onchange="this.form.submit()">
+                <option value="All">All Sections</option>
+                @foreach (var aSection in ViewBag.SectionsList)
+                {
+                    <option value="@aSection"
+                            selected="@(ViewBag.SelectedSection == aSection)">
+                        @aSection
                     </option>
                 }
             </select>
+
         </form>
     </div>
 
-    <!-- Teacher Cards -->
-    <div class="teacher-cards">
-        @foreach (var t in ViewBag.TeacherList)
+    <!-- Classes Cards -->
+    <div class="classes-cards">
+        @foreach (var c in ViewBag.ClassesList)
         {
-            <div class="teacher-card">
-                <h3>@t.Name</h3>
-                <p>UserName: @t.UserName</p>
-                <p>Email: @t.Email</p>
-                <p>Subject: @t.SubjectName</p>
-                <p>Qualification: @t.Qualification</p>
-                <p>Experience: @t.Experience yrs</p>
-                <p>JoiningDate: @t.JoiningDate</p>
+            <div class="classes-card">
+                <h3>@c.ClassName</h3>
+                <p>ClassTeacher: @c.ClassTeacherName</p>
+                <p>Subject: @c.SubjectName</p>
+                <p>GradeName: @c.GradeName</p>
+                <p>SectionName: @c.SectionName yrs</p>
                 <p>
-                    <form method="post" asp-action="PageEditTeacher" asp-route-id=@t.id>
-                        <button class="btn btn-primary px-4" id="EditTeacher">Edit Teacher</button>
+                    <form method="post" asp-action="PageEditClass" asp-route-id=@c.id>
+                        <button class="btn btn-primary px-4" id="EditClass">Edit Class</button>
                     </form>
                 </p>
             </div>

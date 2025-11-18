@@ -80,6 +80,31 @@ namespace SMS_MVC.Controllers
             return View("PageAddTeacher", teacher);
         }
 
-        
+        /// <summary>
+        /// Edit Teacher Page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult PageEditTeacher(int id)
+        {
+            Teachers teacher = _Context.Teachers.FirstOrDefault(x =>x.id == id);
+            ViewBag.UserList = new SelectList(_Context.Users.Where(u => u.RoleId == 2).ToList(), "id", "UserName", teacher.UserId);
+            ViewBag.SubjectList = new SelectList(_Context.Subjects.ToList(), "id", "SubjectName", teacher.SubjectId);
+            return View(teacher);
+        }
+
+        public IActionResult OnUpdateTeacherClicked(Teachers teacher)
+        {
+            if (ModelState.IsValid)
+            {
+                _Context.Teachers.Update(teacher);
+                _Context.SaveChanges();
+                return RedirectToAction("Index");
+            }            
+            ViewBag.UserList = new SelectList(_Context.Users.Where(u => u.RoleId == 2).ToList(), "id", "UserName", teacher.UserId);
+            ViewBag.SubjectList = new SelectList(_Context.Subjects.ToList(), "id", "SubjectName", teacher.SubjectId);
+            return View("PageEditTeacher", teacher);
+        }
     }
 }
