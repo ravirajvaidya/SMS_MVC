@@ -1,6 +1,159 @@
-﻿@{
+﻿@using SMS_MVC.Models.Model_Tables
+@model Classes
+@{
     Layout = null;
 }
 
-<!DOCTYPE html>
-<h1>This is the Add Class Section</h1>
+<meta charset="utf-8" />
+<title>Add New Class</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+    body {
+        background: #f8f9fc;
+        padding: 40px;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card {
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        background: #fff;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .btn-primary {
+        background-color: #6f42c1;
+        border-color: #6f42c1;
+        padding: 10px 25px;
+        font-size: 16px;
+        border-radius: 10px;
+    }
+
+    .btn-secondary {
+        padding: 10px 25px;
+        font-size: 16px;
+        border-radius: 10px;
+    }
+
+    .checkbox-group {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        height: 150px;
+        overflow-y: scroll;
+    }
+</style>
+
+<div class="card">
+    <h2 class="mb-1">Add New Class</h2>
+    <p class="text-muted mb-4">Create a new class section</p>
+
+    <form method="post" asp-action="OnAddClassClicked">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Class Name *</label>
+                <input type="text" class="form-control" placeholder="e.g., Class 10-A" name="ClassName" required />
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Grade *</label>
+                @* <select class="form-select" name="GradeId" required>
+                    <option value="All">All Grades</option>
+                    @foreach (var aGrade in ViewBag.GradesList as SelectList)
+                    {
+                        <option value="@aGrade.Value"
+                                selected="@(ViewBag.SelectedGrade == aGrade.Value)">
+                            @aGrade.Text
+                        </option>
+                    }
+                </select> *@
+
+                @* Using Tag Helper for Dropdown For Direct Model Binding *@
+                <select class="form-select" asp-for="GradeId" asp-items=ViewBag.GradesList>
+                    <option value="">-- Select Grade --</option>
+                </select>
+
+
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Section *</label>
+                @* <select class="form-select" name="SectionId" required>
+                    <option value="All">All Section</option>
+                    @foreach (var aSection in ViewBag.SectionsList as SelectList)
+                    {
+                        <option value="@aSection.Value"
+                                selected="@(ViewBag.SelectedSection == aSection.Value)">
+                            @aSection.Text
+                        </option>
+                    }
+                </select> *@
+
+                @* Using Tag Helper for Dropdown For Direct Model Binding *@
+                <select class="form-select" asp-for="SectionId" asp-items=ViewBag.SectionsList>
+                    <option value="">-- Select Section --</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Class Teacher *</label>
+                @* <select class="form-select" name="ClassTeacherId" required>
+                    <option value="All">All Teacher</option>
+                    @foreach (var aTeacher in ViewBag.TeachersList as SelectList)
+                    {
+                        <option value="@aTeacher.Value"
+                                selected="@(ViewBag.SelectedTeacher == aTeacher.Value)">
+                            @aTeacher.Text
+                        </option>
+                    }
+                </select> *@
+
+                @* Using Tag Helper for Dropdown For Direct Model Binding *@
+                <select class="form-select" asp-for="ClassTeacherId" asp-items=ViewBag.TeachersList>
+                    <option value="">-- Select Class Teacher --</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Subjects *</label>
+            <div class="checkbox-group">
+                @foreach (var sub in ViewBag.SubjectsList as SelectList)
+                {
+                    <div><input type="checkbox" name="SubjectsLst" value="@sub.Value" /> @sub.Text</div>
+                }
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Assign Additional Teachers (if any)</label>
+            <div class="checkbox-group">
+                @foreach (var t in ViewBag.AdditionalTeachers as SelectList)
+                {
+                    <div><input type="checkbox" name="ExtraTeachersLst" value="@t.Value" /> @t.Text</div>
+                }
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-end gap-3">
+            <button type="submit" class="btn btn-primary">Add Teacher</button>
+        </div>
+    </form>
+
+    <!-- Cancel Button (Separate Form) -->
+    <form method="get" asp-action="Index">
+        <div class="d-flex justify-content-end gap-3">
+            <button type="submit" class="btn btn-secondary">Cancel</button>
+        </div>
+    </form>
+</div>
+

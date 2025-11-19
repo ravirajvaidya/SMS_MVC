@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SMS_MVC.Models;
+using SMS_MVC.Models.Model_Tables;
 
 namespace SMS_MVC.Controllers
 {
@@ -57,12 +58,41 @@ namespace SMS_MVC.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Add Class Section
+        /// </summary>
+        /// <returns></returns>
         public IActionResult PageAddClass()
         {
-            ViewBag.ClassTeacherList = new SelectList(_Context.Teachers.ToList(), "id", "Name");
-            ViewBag.GradesList = new SelectList(_Context.Grades.ToList(), "id", "GradeName");
-            ViewBag.SectionsList = new SelectList(_Context.Section.ToList(), "id", "SectionName");
+            //ViewBag.GradesList = _Context.Grades.Select(g => g.GradeName).Distinct().ToList();
+            //ViewBag.SectionsList = _Context.Section.Select(s => s.SectionName).Distinct().ToList();
+            //ViewBag.TeachersList = _Context.Teachers.Select(t => t.Name).Distinct().ToList();
+            //ViewBag.SubjectsList = _Context.Subjects.Select(s => s.SubjectName).Distinct().ToList();
+            //ViewBag.AdditionalTeachers = _Context.Teachers.Select(t => t.Name).Distinct().ToList();
+
+            ViewBag.GradesList = new SelectList(_Context.Grades.ToList(),"id", "GradeName");
+            ViewBag.SectionsList = new SelectList(_Context.Section.ToList(),"id", "SectionName");
+            ViewBag.TeachersList = new SelectList(_Context.Teachers.ToList(), "id", "Name");
+            ViewBag.SubjectsList = new SelectList(_Context.Subjects.ToList(), "id", "SubjectName");
+            ViewBag.AdditionalTeachers = new SelectList(_Context.Teachers.ToList(), "id", "Name");
+
+
             return View("PageAddClass");
+        }
+
+        [HttpPost]
+        public IActionResult OnAddClassClicked(Classes aClass, List<int> SubjectsLst, List<int> ExtraTeachersLst) //string ClassName,int GradeId,int SectionId,int ClassTeacherId,List<int> SubjectsLst, List<int> ExtraTeachersLst)
+        {
+
+            Classes tempClass = new Classes();
+
+            //if(!ModelState.IsValid)
+            //{
+            //    return View("PageAddClass", aClass);
+            //}
+            //_Context.Classes.Add(aClass);
+            //_Context.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
