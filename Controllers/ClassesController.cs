@@ -64,12 +64,6 @@ namespace SMS_MVC.Controllers
         /// <returns></returns>
         public IActionResult PageAddClass()
         {
-            //ViewBag.GradesList = _Context.Grades.Select(g => g.GradeName).Distinct().ToList();
-            //ViewBag.SectionsList = _Context.Section.Select(s => s.SectionName).Distinct().ToList();
-            //ViewBag.TeachersList = _Context.Teachers.Select(t => t.Name).Distinct().ToList();
-            //ViewBag.SubjectsList = _Context.Subjects.Select(s => s.SubjectName).Distinct().ToList();
-            //ViewBag.AdditionalTeachers = _Context.Teachers.Select(t => t.Name).Distinct().ToList();
-
             ViewBag.GradesList = new SelectList(_Context.Grades.ToList(),"id", "GradeName");
             ViewBag.SectionsList = new SelectList(_Context.Section.ToList(),"id", "SectionName");
             ViewBag.TeachersList = new SelectList(_Context.Teachers.ToList(), "id", "Name");
@@ -83,15 +77,31 @@ namespace SMS_MVC.Controllers
         [HttpPost]
         public IActionResult OnAddClassClicked(Classes aClass, List<int> SubjectsLst, List<int> ExtraTeachersLst) //string ClassName,int GradeId,int SectionId,int ClassTeacherId,List<int> SubjectsLst, List<int> ExtraTeachersLst)
         {
+            if(!ModelState.IsValid)
+            {
+                return View("PageAddClass", aClass);
+            }
+            _Context.Classes.Add(aClass);
+            _Context.SaveChanges();
 
-            Classes tempClass = new Classes();
+            TeacherAndClass teachersAndClass = new TeacherAndClass();
+            foreach (var teacherId in ExtraTeachersLst)
+            {
+                teachersAndClass.TeacherId = teacherId;
+                teachersAndClass.ClassId = aClass.id;
+                _Context.TeacherAndClass.Add(teachersAndClass);
+            }
+            _Context.SaveChanges();
 
-            //if(!ModelState.IsValid)
-            //{
-            //    return View("PageAddClass", aClass);
-            //}
-            //_Context.Classes.Add(aClass);
-            //_Context.SaveChanges();
+            ClassAndSubject classAndSubjects = new ClassAndSubject();
+            foreach (var subjectId in SubjectsLst)
+            {
+                classAndSubjects.SubjectId = subjectId;
+                classAndSubjects.ClassId = aClass.id;
+                _Context.ClassAndSubject.Add(classAndSubjects);
+            }
+            _Context.SaveChanges();
+
             return RedirectToAction("Index");
         }
     }

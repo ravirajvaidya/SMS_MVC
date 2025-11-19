@@ -191,9 +191,9 @@
             <div class="classes-card">
                 <h3>@c.ClassName</h3>
                 <p>ClassTeacher: @c.ClassTeacherName</p>
-                <p>Subject: @c.SubjectName</p>
+                @* <p>Subject: @c.SubjectName</p> *@
                 <p>GradeName: @c.GradeName</p>
-                <p>SectionName: @c.SectionName yrs</p>
+                <p>SectionName: @c.SectionName</p>
                 <p>
                     <form method="post" asp-action="PageEditClass" asp-route-id=@c.id>
                         <button class="btn btn-primary px-4" id="EditClass">Edit Class</button>
