@@ -69,6 +69,9 @@
 
             <div class="col-md-6">
                 <label class="form-label">Grade *</label>
+                @* Use this When Not working with any Model Building
+                    Use the Name attribute to bind the selected value back to the controller
+                *@
                 @* <select class="form-select" name="GradeId" required>
                     <option value="All">All Grades</option>
                     @foreach (var aGrade in ViewBag.GradesList as SelectList)
@@ -80,7 +83,10 @@
                     }
                 </select> *@
 
-                @* Using Tag Helper for Dropdown For Direct Model Binding *@
+                @* Using Tag Helper for Dropdown For Direct Model Binding 
+                   Use the asp-for attribute to bind to the Model property
+                   asp-for will bind the selected value back to the Model property in the controller
+                *@
                 <select class="form-select" asp-for="GradeId" asp-items=ViewBag.GradesList>
                     <option value="">-- Select Grade --</option>
                 </select>
