@@ -26,11 +26,11 @@ namespace SMS_MVC.Controllers
             }
             else
             {
-                userDashboardModel._Users = (from admins in _Context.Users
+                userDashboardModel._Users = (from aUser in _Context.Users
                                              join roles in _Context.Roles
-                                             on admins.RoleId equals roles.id
+                                             on aUser.RoleId equals roles.id
                                              where roles.RoleType == tab.Remove(tab.Length - 1)
-                                             select admins).ToList();
+                                             select aUser).ToList();
 
             }
 
@@ -70,10 +70,13 @@ namespace SMS_MVC.Controllers
 
         public IActionResult OnAddUserClicked(Users aUser)
         {
-            _Context.Users.Add(aUser);
-            _Context.SaveChanges();
-
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _Context.Users.Add(aUser);
+                _Context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("PageAddUser");
         }
 
         /// <summary>
@@ -98,9 +101,13 @@ namespace SMS_MVC.Controllers
         [HttpPost]
         public IActionResult OnUpdateUserClicked(Users aUser)
         {
-            _Context.Users.Update(aUser);
-            _Context.SaveChanges();
-            return RedirectToAction("Index");
+            if(ModelState.IsValid)
+            {
+                _Context.Users.Update(aUser);
+                _Context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("PageEditUser", aUser.id);
         }
     }
 }

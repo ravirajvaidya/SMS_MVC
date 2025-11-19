@@ -171,11 +171,11 @@
 
             <select name="subjectFilter" class="filter-dropdown" onchange="this.form.submit()">
                 <option value="All">All Subjects</option>
-                @foreach (var subject in ViewBag.SubjectList)
+                @foreach (var subject in ViewBag.SubjectList as SelectList)
                 {
-                    <option value="@subject"
-                            selected="@(ViewBag.SelectedSubject == @subject)">
-                        @subject
+                    <option value="@subject.Value"
+                            selected="@(ViewBag.SelectedSubject == @subject.Value)">
+                        @subject.Text
                     </option>
                 }
             </select>

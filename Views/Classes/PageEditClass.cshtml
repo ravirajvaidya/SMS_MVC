@@ -57,14 +57,15 @@
 </style>
 
 <div class="card">
-    <h2 class="mb-1">Add New Class</h2>
-    <p class="text-muted mb-4">Create a new class section</p>
+    <h2 class="mb-1">Update Class</h2>
+    <p class="text-muted mb-4">Update selected class section</p>
 
-    <form method="post" asp-action="OnAddClassClicked">
+    <form method="post" asp-action="OnUpdateClassClicked">
+        <input type="hidden" asp-for="id" />
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">Class Name *</label>
-                <input type="text" class="form-control" placeholder="e.g., Class 10-A" name="ClassName" required />
+                <input type="text" class="form-control" placeholder="e.g., Class 10-A" name="ClassName" value=@Model.ClassName required />
             </div>
 
             <div class="col-md-6">
@@ -134,9 +135,17 @@
             <div class="checkbox-group">
                 @foreach (var sub in ViewBag.SubjectsList as SelectList)
                 {
-                    <div><input type="checkbox" name="SubjectsLst" value="@sub.Value" /> @sub.Text</div>
+                    bool isChecked = ((List<int>)ViewBag.SelectedSubjects).Contains(int.Parse(sub.Value));
+
+                    <div>
+                        <input type="checkbox"
+                               name="SubjectsLst"
+                               value="@sub.Value"
+                               @(isChecked ? "checked" : "") /> @sub.Text
+                    </div>
                 }
             </div>
+
         </div>
 
         <div class="mb-4">
@@ -144,14 +153,21 @@
             <div class="checkbox-group">
                 @foreach (var t in ViewBag.AdditionalTeachers as SelectList)
                 {
-                    <div><input type="checkbox" name="ExtraTeachersLst" value="@t.Value" /> @t.Text</div>
+                    bool isChecked = ((List<int>)ViewBag.SelectedAdditionalTeachers).Contains(int.Parse(t.Value));
+
+                    <div>
+                        <input type="checkbox"
+                               name="ExtraTeachersLst"
+                               value="@t.Value"
+                               @(isChecked ? "checked" : "") /> @t.Text
+                    </div>
                 }
             </div>
         </div>
 
         <!-- Buttons -->
         <div class="d-flex justify-content-end gap-3">
-            <button type="submit" class="btn btn-primary">Add Class</button>
+            <button type="submit" class="btn btn-primary">Update Class</button>
         </div>
     </form>
 

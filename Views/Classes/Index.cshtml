@@ -153,30 +153,22 @@
 
             <select name="GradeFilter" class="filter-dropdown" onchange="this.form.submit()">
                 <option value="All">All Grades</option>
-                @foreach (var grade in ViewBag.GradesList)
+                @foreach (var grade in ViewBag.GradesList as SelectList)
                 {
-                    <option value="@grade"
-                            selected="@(ViewBag.SelectedGrade == grade)">
-                        @grade
-                    </option>
-                }
-
-                @* @foreach (var grade in ViewBag.SelectedGrade as SelectList)
-                {
-                    <option value="@grade.Value"
-                            selected="@(ViewBag.SelectedGrade == grade.Value)">
+                    <option value="@grade.Text"
+                            selected="@(ViewBag.SelectedGrade == grade.Text)">
                         @grade.Text
                     </option>
-                } *@
+                }
             </select>
 
             <select name="SectionFilter" class="filter-dropdown" onchange="this.form.submit()">
                 <option value="All">All Sections</option>
-                @foreach (var aSection in ViewBag.SectionsList)
+                @foreach (var aSection in ViewBag.SectionsList as SelectList)
                 {
-                    <option value="@aSection"
-                            selected="@(ViewBag.SelectedSection == aSection)">
-                        @aSection
+                    <option value="@aSection.Text"
+                            selected="@(ViewBag.SelectedSection == aSection.Text)">
+                        @aSection.Text
                     </option>
                 }
             </select>

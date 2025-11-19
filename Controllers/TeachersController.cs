@@ -20,7 +20,7 @@ namespace SMS_MVC.Controllers
             ViewBag.PageTitle = "Teachers Dashboard";
             ViewBag.SelectedSubject = subjectFilter;
             ViewBag.Search = search;
-            ViewBag.SubjectList = _Context.Subjects.Select(s => s.SubjectName).Distinct().ToList();
+            ViewBag.SubjectList = new SelectList(_Context.Subjects.ToList(), "id", "SubjectName");
             ViewBag.TotalTeachers = _Context.Teachers.Count();
 
             var lstTeachers = from t in _Context.Teachers
@@ -31,11 +31,12 @@ namespace SMS_MVC.Controllers
                             t.id,
                             t.Name,
                             t.Email,
-                            UserName = u.UserName,
-                            SubjectName = s.SubjectName,
                             t.Qualification,
                             t.Experience,
-                            JoiningDate = t.JoiningDate.ToShortDateString()
+                            JoiningDate = t.JoiningDate.ToShortDateString(),
+                            UserName = u.UserName,
+                            SubjectName = s.SubjectName,
+                            SubjectId = s.id
                         };
 
             // Apply search filter
@@ -47,7 +48,7 @@ namespace SMS_MVC.Controllers
             // Apply subject filter ONLY if not "All"
             if (!string.IsNullOrEmpty(subjectFilter) && subjectFilter != "All")
             {
-                lstTeachers = lstTeachers.Where(x => x.SubjectName == subjectFilter);
+                lstTeachers = lstTeachers.Where(x => x.SubjectId == Convert.ToInt32(subjectFilter));
             }
 
             ViewBag.TeacherList = lstTeachers.ToList();
@@ -75,9 +76,7 @@ namespace SMS_MVC.Controllers
                 _Context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UserList = new SelectList(_Context.Users.Where(u => u.RoleId == 2).ToList(), "id", "UserName");
-            ViewBag.SubjectList = new SelectList(_Context.Subjects.ToList(), "id", "SubjectName");
-            return View("PageAddTeacher", teacher);
+            return RedirectToAction("PageAddTeacher");
         }
 
         /// <summary>
@@ -102,9 +101,8 @@ namespace SMS_MVC.Controllers
                 _Context.SaveChanges();
                 return RedirectToAction("Index");
             }            
-            ViewBag.UserList = new SelectList(_Context.Users.Where(u => u.RoleId == 2).ToList(), "id", "UserName", teacher.UserId);
-            ViewBag.SubjectList = new SelectList(_Context.Subjects.ToList(), "id", "SubjectName", teacher.SubjectId);
-            return View("PageEditTeacher", teacher);
+            return RedirectToAction("PageAddTeacher", teacher.id);
+
         }
     }
 }
