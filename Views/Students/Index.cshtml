@@ -1,0 +1,111 @@
+﻿@model List<SMS_MVC.Models.Model_Tables.Students>
+@{
+    Layout = "_LayoutDashboard";
+}
+
+<div class="container-fluid px-4">
+
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Students</h2>
+            <p class="text-muted mb-0">Manage student information and records</p>
+        </div>
+
+        <form method="get" asp-action="PageAddStudent">
+            <button class="btn btn-primary px-4">+ Add Student</button>
+        </form>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-2">
+            <div class="card text-center shadow-sm border-0" style="background-color:#E5D9FA;">
+                <div class="card-body">
+                    <h4 class="fw-bold">@ViewBag.TotalStudents</h4>
+                    <p class="mb-0 text-dark">Total Students</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" asp-action="Index" class="row g-3">
+                <div class="col-md-6">
+                    <input type="text"
+                           name="search"
+                           value="@ViewBag.Search"
+                           class="form-control"
+                           placeholder="Search Students by Name..." />
+                </div>
+
+                <div class="col-md-3">
+                    <select name="GradeFilter" class="form-select" onchange="this.form.submit()">
+                        <option value="All">All Grades</option>
+                        @foreach (var grade in ViewBag.GradesList as SelectList)
+                        {
+                            <option value="@grade.Text" selected="@(ViewBag.SelectedGrade == grade.Text)">
+                                @grade.Text
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <select name="SectionFilter" class="form-select" onchange="this.form.submit()">
+                        <option value="All">All Sections</option>
+                        @foreach (var aSection in ViewBag.SectionsList as SelectList)
+                        {
+                            <option value="@aSection.Text" selected="@(ViewBag.SelectedSection == aSection.Text)">
+                                @aSection.Text
+                            </option>
+                        }
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Students Table -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <h5 class="fw-semibold mb-3"><i class="bi bi-people-fill me-2"></i>Students List</h5>
+
+            <table class="table table-borderless align-middle mb-0">
+                <thead>
+                    <tr><th>Students</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center w-100">
+                                    <div class="bg-success bg-opacity-10 text-success fw-bold rounded-circle d-flex align-items-center justify-content-center me-3"
+                                         style="width: 40px; height: 40px;">
+                                        @student.Name.Substring(0, 1).ToUpper()
+                                    </div>
+
+                                    <div>
+                                        <div class="fw-semibold">@student.Name</div>
+                                        <small class="text-muted">@student.Email</small>
+                                    </div>
+
+                                    <div class="ms-auto">
+                                        <form method="post" asp-action="PageEditStudent" asp-route-id="@student.id">
+                                            <button class="btn btn-primary px-4">Edit Student</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>

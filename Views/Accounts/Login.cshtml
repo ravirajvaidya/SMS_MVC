@@ -150,8 +150,10 @@
     </style>
 </head>
 
+
 <body>
-    <form method="post">
+    <form method="post" asp-action="OnLoginClicked">
+        @Html.AntiForgeryToken()
         <div class="container">
 
             <!-- Left Section -->
@@ -171,15 +173,13 @@
 
                     <label>Password</label>
                     <input asp-for="Password" type="password" />
-
-                    <button type="submit" class="btn-login" asp-action="OnLoginClicked">Login</button>
-
                     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
                     {
                         <p style="color:red; text-align:center; margin-top:10px;">
                             @Model.ErrorMessage
                         </p>
                     }
+                    <button type="submit" class="btn-login">Login</button>
                 </div>
             </div>
         </div>

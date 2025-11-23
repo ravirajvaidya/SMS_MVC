@@ -112,6 +112,11 @@
                class="@(ViewBag.Active == "Classes" ? "active" : "")">
                 <i class="fa fa-school me-2"></i> Classes
             </a>
+
+            <a asp-controller="Students" asp-action="Index"
+               class="@(ViewBag.Active == "Students" ? "active" : "")">
+                <i class="fa fa-school me-2"></i> Students
+            </a>
         </div>
         <div class="bottom">
             <span class="d-block fw-bold">Admin</span>
