@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SMS_MVC.Models;
+using SMS_MVC.Models.Model_Tables;
 
 namespace SMS_MVC.Controllers
 {
@@ -26,10 +27,17 @@ namespace SMS_MVC.Controllers
             return View(_Context.Students.ToList());
         }
 
-        [HttpGet]
         public IActionResult PageAddStudent()
         {
-            return View();
+            ViewBag.UserList = new SelectList(_Context.Users.Where(x=>x.RoleId == 6).ToList(), "id", "UserName");
+            ViewBag.Classes = new SelectList(_Context.Classes.ToList(), "id", "ClassName");
+            return View("PageAddStudent",new Students());
+        }
+
+        [HttpPost]
+        public IActionResult AddStudent()
+        {
+            return RedirectToAction("Index");
         }
     }
 }
