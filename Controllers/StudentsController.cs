@@ -25,5 +25,11 @@ namespace SMS_MVC.Controllers
             ViewBag.SectionsList = new SelectList(_Context.Section.ToList(), "id", "SectionName");
             return View(_Context.Students.ToList());
         }
+
+        [HttpGet]
+        public IActionResult PageAddStudent()
+        {
+            return View();
+        }
     }
 }
