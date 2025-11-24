@@ -22,8 +22,8 @@
         <div class="col-md-2">
             <div class="card text-center shadow-sm border-0" style="background-color:#E5D9FA;">
                 <div class="card-body">
-                    <h4 class="fw-bold">@ViewBag.TotalStudents</h4>
                     <p class="mb-0 text-dark">Total Students</p>
+                    <h4 class="fw-bold">@ViewBag.TotalStudents</h4>
                 </div>
             </div>
         </div>
@@ -75,31 +75,53 @@
 
             <table class="table table-borderless align-middle mb-0">
                 <thead>
-                    <tr><th>Students</th></tr>
+                    <tr>
+                        <th>Initials</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Admission Date</th>
+                        <th>Contact No</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach (var student in Model)
                     {
                         <tr>
+                            <div class="d-flex align-items-center w-100">
                             <td>
-                                <div class="d-flex align-items-center w-100">
-                                    <div class="bg-success bg-opacity-10 text-success fw-bold rounded-circle d-flex align-items-center justify-content-center me-3"
-                                         style="width: 40px; height: 40px;">
-                                        @student.Name.Substring(0, 1).ToUpper()
-                                    </div>
-
-                                    <div>
-                                        <div class="fw-semibold">@student.Name</div>
-                                        <small class="text-muted">@student.Email</small>
-                                    </div>
-
-                                    <div class="ms-auto">
-                                        <form method="post" asp-action="PageEditStudent" asp-route-id="@student.id">
-                                            <button class="btn btn-primary px-4">Edit Student</button>
-                                        </form>
-                                    </div>
+                                <div class="bg-success bg-opacity-10 text-success fw-bold rounded-circle d-flex align-items-center justify-content-center me-3"
+                                        style="width: 40px; height: 40px;">
+                                    @student.Name.Substring(0, 1).ToUpper()
                                 </div>
                             </td>
+                            <td>
+                                <div>
+                                    <div class="fw-semibold">@student.Name</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <small class="text-muted">@student.Email</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <small class="text-muted">@student.AdmissionDate.ToShortDateString()</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <small class="text-muted">@student.PhoneNumber</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="ms-auto">
+                                    <form method="post" asp-action="PageEditStudent" asp-route-id="@student.id">
+                                        <button class="btn btn-primary px-4">Edit Student</button>
+                                    </form>
+                                </div>
+                            </td>
+                            </div>
                         </tr>
                     }
                 </tbody>

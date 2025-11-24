@@ -82,6 +82,11 @@ namespace SMS_MVC.Controllers
                 TempData["AlertMessage"] = "Please Fill all Fields of the Form";
                 return RedirectToAction("PageAddClass");
             }
+
+            string GradeName = _Context.Grades.FirstOrDefault(g => g.id == aClass.GradeId).GradeName;
+            string SectionName = _Context.Section.FirstOrDefault(s => s.id == aClass.SectionId).SectionName;
+            string ClassName = string.Format("Class-{0}-{1}-{2}",aClass.ClassName, GradeName, SectionName);
+            aClass.ClassName = ClassName;
             _Context.Classes.Add(aClass);
             _Context.SaveChanges();
 

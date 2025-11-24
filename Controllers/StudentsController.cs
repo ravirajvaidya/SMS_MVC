@@ -27,6 +27,11 @@ namespace SMS_MVC.Controllers
             return View(_Context.Students.ToList());
         }
 
+        /// <summary>
+        /// Add Student Page Implemented
+        /// </summary>
+        /// <returns></returns>
+
         public IActionResult PageAddStudent()
         {
             ViewBag.UserList = new SelectList(_Context.Users.Where(x=>x.RoleId == 6).ToList(), "id", "UserName");
@@ -35,9 +40,20 @@ namespace SMS_MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddStudent()
+        public IActionResult AddStudent(Students aStudent)
         {
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _Context.Students.Add(aStudent);
+                _Context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+        public IActionResult PageEditStudent()
+        {
+            return View();
         }
     }
 }
